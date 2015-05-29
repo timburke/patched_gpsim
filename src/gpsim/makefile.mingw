@@ -30,7 +30,7 @@ INCLUDES = -I ../plat/win32 \
 	-I $(GDK_PIXBUF_PATH)/include/gdk-pixbuf-2.0 \
 	-I $(POPT_PATH)/include
 
-DEFINES += -DHAVE_GUI
+#DEFINES += -DHAVE_GUI
 
 all :				\
 	../config.h		\

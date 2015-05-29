@@ -42,6 +42,7 @@ GTKEXTRA_PATH = $(TOP)/gtkextra-2
 READLINE_PATH = $(TOP)/readline
 PTHREAD_PATH = $(TOP)/pthreads
 GDK_PIXBUF_PATH = $(TOP)/gdk-pixbuf
+BOOST_PATH = $(TOP)/boost/boost_1_58_0
 
 ################
 # Compiler to use. The -fnative-struct switch is important so that the

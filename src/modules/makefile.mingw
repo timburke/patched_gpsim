@@ -19,7 +19,10 @@ LIBS = 	-L $(POPT_PATH)/lib -l popt \
 	-L $(GTK_PATH)/lib -l gdk-win32-2.0 -l gtk-win32-2.0 \
 	-L $(GLIB_PATH)/lib -l glib-2.0 -l gobject-2.0 \
 	-L /cygdrive/c/Anaconda/libs -l python27 \
+	-l ws2_32 \
+	-L $(PTHREAD_PATH)/lib -l pthreadGC2 \
 	../src/libgpsim.a
+
 
 INCLUDES = -I ../plat/win32 \
 	-I $(GLIB_PATH)/include/glib-2.0 -I $(GLIB_PATH)/lib/glib-2.0/include \
@@ -27,9 +30,10 @@ INCLUDES = -I ../plat/win32 \
 	-I $(ATK_PATH)/include/atk-1.0 \
 	-I $(PANGO_PATH)/include/pango-1.0 \
 	-I $(CAIRO_PATH)/include/cairo \
-	-I $(GDK_PIXBUF_PATH)/include/gdk-pixbuf-2.0
+	-I $(GDK_PIXBUF_PATH)/include/gdk-pixbuf-2.0 \
+	-I . 
 
-DEFINES += -DHAVE_GUI
+#DEFINES += -DHAVE_GUI
 
 all :				\
 	../config.h		\
@@ -46,6 +50,7 @@ modules_OBJECTS =		\
 	momo_python_slave_behave.o \
 	momo_triggered_master.o \
 	momo.o \
+	momo_server.o \
 	led.o			\
 	logic.o			\
 	push_button.o		\

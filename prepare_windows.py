@@ -11,7 +11,8 @@
 #
 # *** Build Instructions for gpsim on Windows ***
 # 1. Read http://gpsim.sourceforge.net/gpsimWin32/gpsimWin32.html and make sure you have cygwin 32 bit installed with the correct packages
-# 2. run `python prepare_windows prepare C:\gpsim_project` from patched_gpsim root directory 
+# 2. run `python prepare_windows prepare C:\gpsim_project` from patched_gpsim root directory
+# 3. build boost by going to  
 # 3. from a cygwin shell, navigate to C:\gpsim_project/gpsim and run make -f makefile.mingw
 # 4. run `python prepare_windows package C:\gpsim_project` from patched_gpsim root directory
 # 5. You can now execute gpsim from C:\gpsim_project\gpsim\gpsim\bin 
@@ -38,6 +39,7 @@ reqs.append(['fontconfig', 'http://ftp.gnome.org/pub/gnome/binaries/win32/depend
 reqs.append(['gtkextra-2', r'http://sourceforge.net/projects/gtkextra/files/2.1.2/gtk%2Bextra-2.1.2-dev.zip'])
 reqs.append(['pthreads-src', 'ftp://sourceware.org/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip'])
 reqs.append(['readline', 'http://gpsim.sourceforge.net/gpsimWin32/packages/readline-5.2-20061112-lib.zip'])
+#reqs.append(['boost', r'http://downloads.sourceforge.net/project/boost/boost/1.58.0/boost_1_58_0.zip'])
 
 #All dlls and other files that need to be copied where gpsim.exe is so that is can find them and use them
 #Imagine how painstaking it was to find all the right ones...
@@ -148,7 +150,7 @@ if len(sys.argv) != 3:
 	sys.exit(1)
 
 cmd = sys.argv[1]
-if cmd not in ['prepare', 'package']:
+if cmd not in ['prepare', 'source', 'package']:
 	print "usage: prepare_windows.py [prepare|package] <desired project directory>"
 	sys.exit(1)
 
@@ -203,3 +205,12 @@ elif cmd == 'package':
 	src = os.path.join(basedir, 'gpsim', 'modules', 'libgpsim_modules.dll')
 	dst = os.path.join(basedir, 'gpsim', 'gpsim', 'bin', 'libgpsim_modules.dll')
 	shutil.copyfile(src, dst)
+elif cmd == 'source':
+	#Copy over the source code
+	srcdir = os.path.join(os.path.dirname(__file__), 'src')
+	dstdir = os.path.join(basedir, 'gpsim')
+	if os.path.exists(dstdir):
+		shutil.rmtree(dstdir)
+
+	print "Copying source code"
+	shutil.copytree(srcdir, dstdir)

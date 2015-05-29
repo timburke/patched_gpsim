@@ -23,8 +23,6 @@ License along with this library; if not, see
 
 #include "breakpoints.h"
 #include "exports.h"
-#include <glib.h>
-#include <glib-object.h>
 
 //---------------------------------------------------------
 // Cycle Counter
@@ -117,6 +115,9 @@ public:
     function is invoked. In either case, the break point is
     cleared.
   */
+
+  void lock_mutex();
+  void unlock_mutex();
 						
   inline void increment()
   {
@@ -130,9 +131,9 @@ public:
     if(value == break_on_this)
       breakpoint();
 
-    g_mutex_lock(&mutex);
+    lock_mutex();
     value++;
-    g_mutex_unlock(&mutex);
+    unlock_mutex();
 
     // Note that it's really inefficient to trace every cycle increment. 
     // Instead, we implicitly trace the increments with the instruction traces.
@@ -154,10 +155,10 @@ public:
       if (value == break_on_this)
 	breakpoint();
     }
-      g_mutex_lock(&mutex);
-      value++;
-      g_mutex_unlock(&mutex);
 
+      lock_mutex();
+      value++;
+      unlock_mutex();
   }
 
 
@@ -193,7 +194,6 @@ private:
 
   guint64 value;          // Current value of the cycle counter.
   guint64 break_on_this;  // If there's a pending cycle break point, then it'll be this
-  GMutex  mutex;
 
   /*
     breakpoint

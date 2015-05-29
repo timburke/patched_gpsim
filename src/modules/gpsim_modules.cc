@@ -70,6 +70,7 @@ support:
 #include "i2c.h"
 #include "momo_python_slave.h"
 #include "momo_triggered_master.h"
+#include "momo_server.h"
 
 Module_Types available_modules[] =
 {
@@ -131,6 +132,7 @@ Module_Types available_modules[] =
   { {"i2cmaster", "I2CMaster"},   I2C_Module::I2CMaster::construct },
   { {"MoMoPythonSlave", "momo_python_slave"}, MomoModule::MomoPythonSlave::construct},
   { {"MoMoTriggeredMaster", "momo_triggered_master"}, MomoModule::MomoTriggeredMaster::construct},
+  { {"MoMoServer", "momo_server"}, MomoModule::MomoServer::construct},
   // No more modules
   { {0,0},0}
 };

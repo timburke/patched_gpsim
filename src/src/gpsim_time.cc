@@ -32,6 +32,7 @@ License along with this library; if not, see
 #include "xref.h"
 
 #include "protocol.h"
+#include <pthread.h>
 
 //#define __DEBUG_CYCLE_COUNTER__
 
@@ -47,6 +48,7 @@ Cycle_Counter &(*dummy_cycles)(void) = get_cycles;
 
 StopWatch *stop_watch;
 
+pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 
 //--------------------------------------------------
 // member functions for the Cycle_Counter class
@@ -313,6 +315,16 @@ void Cycle_Counter::clear_break(TriggerObject *f)
 // set a cycle counter break point relative to the current cpu cycle value. Return 1 if successful.
 //
 
+void Cycle_Counter::lock_mutex()
+{
+  pthread_mutex_lock(&mutex);
+}
+
+void Cycle_Counter::unlock_mutex()
+{
+  pthread_mutex_unlock(&mutex);
+}
+
 bool Cycle_Counter::set_break_delta(guint64 delta, TriggerObject *f, unsigned int bpn)
 {
 
@@ -325,9 +337,9 @@ bool Cycle_Counter::set_break_delta(guint64 delta, TriggerObject *f, unsigned in
     cout << " does not have callback\n";
 #endif
 
-  g_mutex_lock(&mutex);
+  pthread_mutex_lock(&mutex);
   bool val = set_break(value+delta,f,bpn);
-  g_mutex_unlock(&mutex);
+  pthread_mutex_unlock(&mutex);
 
   return val;
 }
@@ -779,13 +791,10 @@ Cycle_Counter::Cycle_Counter(void)
       l1 = l1->next;
     }
   l1->next = 0;
-
-  g_mutex_init(&mutex);
 }
 
 Cycle_Counter::~Cycle_Counter()
 {
-  g_mutex_clear(&mutex);
 }
 
 //------------------------------------------------------------------------
