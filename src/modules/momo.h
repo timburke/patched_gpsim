@@ -123,8 +123,6 @@ class MomoDevice : public Module
 PyObject *	load_python_module(const std::string &path);
 PyObject *	load_python_function(PyObject *module, const std::string &function_name);
 
-};
-
 class MomoDataSource
 {
 	public:
@@ -132,6 +130,10 @@ class MomoDataSource
 	
 	virtual uint8_t generate_call(std::vector<uint8_t> &out_params) = 0;
 	virtual void 	process_response(const std::vector<uint8_t> &response) = 0;
+
+	virtual void	handle_endpoint(const std::vector<uint8_t> params, std::vector<uint8_t> &response) {};
+};
+
 };
 
 #endif

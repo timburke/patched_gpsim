@@ -23,6 +23,8 @@ License along with this library; if not, see
 
 #include "breakpoints.h"
 #include "exports.h"
+#include <glib.h>
+#include <glib-object.h>
 
 //---------------------------------------------------------
 // Cycle Counter
@@ -103,6 +105,7 @@ public:
   bool bSynchronous; // a flag that's true when the time per counter tick is constant
 
   Cycle_Counter();
+  ~Cycle_Counter();
   void preset(guint64 new_value);     // not used currently.
 
   /*
@@ -124,11 +127,12 @@ public:
     // Increment the current cycle then check if
     // we have a break point set here
 
-
     if(value == break_on_this)
       breakpoint();
 
+    g_mutex_lock(&mutex);
     value++;
+    g_mutex_unlock(&mutex);
 
     // Note that it's really inefficient to trace every cycle increment. 
     // Instead, we implicitly trace the increments with the instruction traces.
@@ -150,7 +154,9 @@ public:
       if (value == break_on_this)
 	breakpoint();
     }
+      g_mutex_lock(&mutex);
       value++;
+      g_mutex_unlock(&mutex);
 
   }
 
@@ -187,6 +193,7 @@ private:
 
   guint64 value;          // Current value of the cycle counter.
   guint64 break_on_this;  // If there's a pending cycle break point, then it'll be this
+  GMutex  mutex;
 
   /*
     breakpoint

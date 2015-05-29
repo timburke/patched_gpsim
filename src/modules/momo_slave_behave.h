@@ -41,6 +41,8 @@ class MomoSlaveBehavior
 	bool				ack_value;
 	MoMoSlaveState		state;
 
+	MomoDataSource		*data_source;
+
 	bool				first_read;
 
 	std::vector<uint8_t> data;

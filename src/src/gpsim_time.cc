@@ -309,7 +309,7 @@ void Cycle_Counter::clear_break(TriggerObject *f)
 }
 
 //--------------------------------------------------
-// set_break_delta
+// set_break_delta (thread safe)
 // set a cycle counter break point relative to the current cpu cycle value. Return 1 if successful.
 //
 
@@ -325,10 +325,11 @@ bool Cycle_Counter::set_break_delta(guint64 delta, TriggerObject *f, unsigned in
     cout << " does not have callback\n";
 #endif
 
-  return set_break(value+delta,f,bpn);
+  g_mutex_lock(&mutex);
+  bool val = set_break(value+delta,f,bpn);
+  g_mutex_unlock(&mutex);
 
-  
-
+  return val;
 }
 
 
@@ -779,8 +780,13 @@ Cycle_Counter::Cycle_Counter(void)
     }
   l1->next = 0;
 
+  g_mutex_init(&mutex);
 }
 
+Cycle_Counter::~Cycle_Counter()
+{
+  g_mutex_clear(&mutex);
+}
 
 //------------------------------------------------------------------------
 // StopWatch 
