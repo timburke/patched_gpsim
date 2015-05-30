@@ -113,7 +113,7 @@ AM_PROG_LIBTOOL
 AC_LANG([C++])
 #AC_CHECK_LIB([gpsim], [main])
 AC_CHECK_LIB([popt], [main])
-#AC_CHECK_LIB([pthread], [main])
+AC_CHECK_LIB([pthread], [main])
 
 AC_CHECK_LIB([dl], [dlopen], [LIBDL="-ldl"])
 

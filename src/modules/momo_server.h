@@ -1,6 +1,8 @@
 #ifndef __momo_server_h__
 #define __momo_server_h__
 
+#define IN_MODULE
+
 #include "momo_master_behave.h"
 #include "momo_slave_behave.h"
 #include "../src/gpsim_time.h"
@@ -66,8 +68,6 @@ class MomoServer : public TriggerObject, MomoDevice, MomoDataSource
 	virtual void new_scl_edge(bool value);
 
 	static Module *construct(const char *name);
-
-
 };
 
 };

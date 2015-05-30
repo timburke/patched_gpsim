@@ -69,12 +69,11 @@ void MomoServer::process_response(const std::vector<uint8_t> &response)
 
 }
 
-
 void MomoServer::callback()
 {
 
 }
-	
+
 void MomoServer::new_sda_edge(bool value)
 {
 
