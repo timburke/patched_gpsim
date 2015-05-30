@@ -48,7 +48,7 @@ Cycle_Counter &(*dummy_cycles)(void) = get_cycles;
 
 StopWatch *stop_watch;
 
-pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
+pthread_mutex_t time_mutex = PTHREAD_MUTEX_INITIALIZER;
 
 //--------------------------------------------------
 // member functions for the Cycle_Counter class
@@ -317,12 +317,12 @@ void Cycle_Counter::clear_break(TriggerObject *f)
 
 void Cycle_Counter::lock_mutex()
 {
-  pthread_mutex_lock(&mutex);
+  pthread_mutex_lock(&time_mutex);
 }
 
 void Cycle_Counter::unlock_mutex()
 {
-  pthread_mutex_unlock(&mutex);
+  pthread_mutex_unlock(&time_mutex);
 }
 
 bool Cycle_Counter::set_break_delta(guint64 delta, TriggerObject *f, unsigned int bpn)
@@ -337,9 +337,9 @@ bool Cycle_Counter::set_break_delta(guint64 delta, TriggerObject *f, unsigned in
     cout << " does not have callback\n";
 #endif
 
-  pthread_mutex_lock(&mutex);
+  pthread_mutex_lock(&time_mutex);
   bool val = set_break(value+delta,f,bpn);
-  pthread_mutex_unlock(&mutex);
+  pthread_mutex_unlock(&time_mutex);
 
   return val;
 }
