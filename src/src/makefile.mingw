@@ -16,7 +16,7 @@ INCLUDES = -I ../plat/win32 -I \
 	-I $(GTK_PATH)/include -I $(GTK_PATH)/lib/gtk+/include \
 	-I $(PTHREAD_PATH)/include
 
-#DEFINES += -DHAVE_GUI
+DEFINES += -DHAVE_GUI
 
 DLL_LDLIBS = -L $(GLIB_PATH)/lib -l gobject-2.0 -l gthread-2.0 -l glib-2.0 \
 	-L $(PTHREAD_PATH)/lib -l pthreadGC2
