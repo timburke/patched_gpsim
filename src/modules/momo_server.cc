@@ -1,5 +1,6 @@
 
 #include "momo_server.h"
+#include "momo_socket_routines.h"
 
 namespace MomoModule
 {
@@ -46,6 +47,17 @@ MomoServer::MomoServer(const char *new_name) : MomoDevice(new_name), slave(scl, 
 	master.set_data_source(this);
 
 	init_sockets();
+
+	ServerData *data = new ServerData;
+	data->server = this;
+	data->port = 10000;
+
+	pthread_t thread;
+	if (pthread_create(&thread, NULL, listen_on_port, data) != 0)
+	{
+		printf("Could not start listening thread.\n");
+		exit(1);
+	}
 }
 
 MomoServer::~MomoServer()

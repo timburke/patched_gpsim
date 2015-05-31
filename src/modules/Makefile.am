@@ -22,6 +22,7 @@ libgpsim_modules_la_SOURCES = \
 	momo_master_behave.cc momo_master_behave.h \
 	momo_triggered_master.cc momo_triggered_master.h \
 	momo_server.cc momo_server.h \
+	momo_socket_routines.cc momo_socket_routines.h \
 	stimuli.h stimuli.cc \
 	ttl.cc ttl.h \
 	video.cc video.h \

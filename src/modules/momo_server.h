@@ -49,12 +49,14 @@ int 	close_socket(SOCKET socket);
 class MomoServer : public TriggerObject, MomoDevice, MomoDataSource
 {
 	private:
-	pthread_mutex_t		shared_data;
+	pthread_mutex_t			shared_data;
 
-	MomoSlaveBehavior 	slave;
-	MomoMasterBehavior	master;
+	MomoSlaveBehavior 		slave;
+	MomoMasterBehavior		master;
 
-	Cycle_Counter		*cycles;
+	Cycle_Counter			*cycles;
+
+	std::vector<pthread_t> 	threads;
 
 	public:
 	MomoServer(const char *name);
