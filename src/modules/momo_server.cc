@@ -5,52 +5,20 @@
 namespace MomoModule
 {
 
-bool init_sockets()
-{
-	#ifdef _WIN32
-	WSADATA wsa_data;
-	return WSAStartup(MAKEWORD(1,1), &wsa_data) == 0;
-	#else
-	return true;
-  	#endif
-}
-
-bool finish_sockets()
-{
-	#ifdef _WIN32
-	return WSACleanup() == 0;
-	#else
-	return true;
-	#endif
-}
-
-int close_socket(SOCKET sock)
-{
-	int status = 0;
-
-	#ifdef _WIN32
-	status = shutdown(sock, SD_BOTH);
-	if (status == 0) { status = closesocket(sock); }
-	#else
-	status = shutdown(sock, SHUT_RDWR);
-	if (status == 0) { status = close(sock); }
-	#endif
-
-	return status;
-}
-
-MomoServer::MomoServer(const char *new_name) : MomoDevice(new_name), slave(scl, sda), master(scl, sda)
+MomoServer::MomoServer(const char *new_name) : MomoDevice(new_name), slave(scl, sda), master(scl, sda), port_sym("port", 0, "Port Number")
 {
 	pthread_mutex_init(&shared_data, NULL);
 	cycles = &get_cycles();
 
 	master.set_data_source(this);
 
+	addSymbol(&port_sym);
+
 	init_sockets();
 
 	ServerData *data = new ServerData;
 	data->server = this;
-	data->port = 10000;
+	data->port = 0;
 
 	pthread_t thread;
 	if (pthread_create(&thread, NULL, listen_on_port, data) != 0)
@@ -64,6 +32,11 @@ MomoServer::~MomoServer()
 {
 	pthread_mutex_destroy(&shared_data);
 	finish_sockets();
+}
+
+void MomoServer::set_port(int port)
+{
+	port_sym.set(port);
 }
 
 Module *MomoServer::construct(const char *name)

@@ -51,6 +51,7 @@ modules_OBJECTS =		\
 	momo_triggered_master.o \
 	momo.o \
 	momo_server.o \
+	momo_socket_routines.o \
 	led.o			\
 	logic.o			\
 	push_button.o		\

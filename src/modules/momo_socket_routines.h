@@ -73,6 +73,10 @@ struct ServerResponse
 	}
 };
 
+bool 	init_sockets();
+bool 	finish_sockets();
+int 	close_socket(SOCKET socket);
+
 void* 	listen_on_port(void *arg);
 void 	send_error(SOCKET sock, uint32_t error_code);
 int 	read_socket(SOCKET sock, void *buffer, int length);

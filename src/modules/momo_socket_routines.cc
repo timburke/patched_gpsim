@@ -4,6 +4,39 @@
 namespace MomoModule
 {
 
+bool init_sockets()
+{
+	#ifdef _WIN32
+	WSADATA wsa_data;
+	return WSAStartup(MAKEWORD(1,1), &wsa_data) == 0;
+	#else
+	return true;
+  	#endif
+}
+
+bool finish_sockets()
+{
+	#ifdef _WIN32
+	return WSACleanup() == 0;
+	#else
+	return true;
+	#endif
+}
+
+int close_socket(SOCKET sock)
+{
+	int status = 0;
+
+	#ifdef _WIN32
+	status = shutdown(sock, SD_BOTH);
+	if (status == 0) { status = closesocket(sock); }
+	#else
+	status = shutdown(sock, SHUT_RDWR);
+	if (status == 0) { status = close(sock); }
+	#endif
+
+	return status;
+}
 
 /*
  * Thread routine that listens forever on a certain port waiting for connections
@@ -34,6 +67,17 @@ void* listen_on_port(void *arg)
 		printf("Could not start listening for connections.\n");
 		exit(2);
 	}
+
+	//Find out what port number we're listen on
+	struct sockaddr_in sin;
+	socklen_t len = sizeof(sin);
+	if (getsockname(sock, (struct sockaddr *)&sin, &len) == -1)
+	{
+		printf("Could not get port number.\n");
+		exit(3);
+	}
+	
+	data->server->set_port(ntohs(sin.sin_port));
 
 	//Listen for connections and spawn a thread to handle each one
 	while (true)

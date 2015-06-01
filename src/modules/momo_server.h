@@ -42,10 +42,6 @@ namespace MomoModule
  * prototype, etc.
  */
 
-bool 	init_sockets();
-bool 	finish_sockets();
-int 	close_socket(SOCKET socket);
-
 class MomoServer : public TriggerObject, MomoDevice, MomoDataSource
 {
 	private:
@@ -57,6 +53,8 @@ class MomoServer : public TriggerObject, MomoDevice, MomoDataSource
 	Cycle_Counter			*cycles;
 
 	std::vector<pthread_t> 	threads;
+
+	Integer					port_sym;
 
 	public:
 	MomoServer(const char *name);
@@ -70,6 +68,9 @@ class MomoServer : public TriggerObject, MomoDevice, MomoDataSource
 	virtual void new_scl_edge(bool value);
 
 	static Module *construct(const char *name);
+
+	//Thread communication routines
+	void set_port(int port);
 };
 
 };
